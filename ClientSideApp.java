@@ -1,5 +1,7 @@
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -11,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JButton;
 
 public class ClientSideApp {
     public static void main(String[] args) throws IOException {
@@ -22,38 +25,90 @@ class ClientSwing {
     static JFrame window;
     JPanel navJPanel;
     ImageIcon serverProfilePicture;
+    ImageIcon threeDotIcon;
     JPanel messageJPanel;
     JLabel profilePicHolder;
+    JLabel arrowIconHolder;
+    JButton navOptionButton;
     int windowWidth = 490;
     int windowHeight = 680;
 
    
     public ClientSwing() throws IOException {
         window = new JFrame();
-        profilePicHolder = new JLabel();
+        profilePicHolder = new JLabel("Abebe Demelash");
+        navOptionButton = new JButton();
+        threeDotIcon = new ImageIcon("Assets\\the_dot.png");
+        arrowIconHolder = new JLabel();
+        profilePicHolder.setLayout(new FlowLayout());
+        messageJPanel = new JPanel();
+
+        //The method down below will convert the "cliprofilepic.jpeg" image into a circular png image to make it appropriate for profile picture
+        navJPanel = new JPanel();
+        navJPanel.setLayout(null);
+
         convertImageToCircular();
-        serverProfilePicture = new ImageIcon("cliprofilepic.png");
+        serverProfilePicture = new ImageIcon("Assets\\cliprofilepic.png");
+        
         Image profilePic = serverProfilePicture.getImage();
+        ImageIcon backArrowIcon = new ImageIcon("Assets\\arrow.png");
+        Image threeDot = threeDotIcon.getImage().getScaledInstance(25, 30, java.awt.Image.SCALE_DEFAULT);
+        Image backArrow = backArrowIcon.getImage();
+        threeDotIcon = new ImageIcon(threeDot);
+        
+        
         Image newProfilePicture = profilePic.getScaledInstance(60, 57, java.awt.Image.SCALE_AREA_AVERAGING);
         serverProfilePicture = new ImageIcon(newProfilePicture);
         profilePicHolder.setIcon(serverProfilePicture);
-        profilePicHolder.setSize(50,45);
-        navJPanel = new JPanel();
-        navJPanel.setLayout(null);
+        profilePicHolder.setBackground(Color.blue);
+        navOptionButton.setBackground(null);
+        navOptionButton.setBorder(null);
         
-        messageJPanel = new JPanel();
+        navOptionButton.setIcon(threeDotIcon);
+        
+        
+        // Image newBackArrowImage = shrinkImage(backArrow, windowWidth, windowHeight);
+        // backArrowIcon = new ImageIcon(newBackArrowImage);
+        Image backarrImage = backArrow.getScaledInstance(20, 20, java.awt.Image.SCALE_AREA_AVERAGING);
+        arrowIconHolder.setIcon(new ImageIcon(backarrImage));
+        
+        
+        System.out.println(backArrowIcon);
+        
+        
+        profilePicHolder.setSize(50,45);
+        
+        
+
+        
+
         window.setVisible(true);
         window.setLayout(null);
- 
+        navOptionButton.setFocusable(false);
+        
+        // profilePicHolder.setText("Abebe Demelash");
+        profilePicHolder.setFont(new Font("Arial", Font.BOLD , 20));
+        profilePicHolder.setForeground(Color.white);
+        
+        System.out.println(profilePicHolder.getText());
+
         navJPanel.setBounds(0, 0, windowWidth, 60);
-        profilePicHolder.setBounds(32, 3,100,58);
+        navOptionButton.setBounds(windowWidth - 45, 5, 20 , 50);
+        profilePicHolder.setBounds(32, 3,windowWidth - 90,58);
+        
+        arrowIconHolder.setBounds(4,5,30,10);
+        arrowIconHolder.setSize(30,50);
+        profilePicHolder.setIconTextGap(15);
+        
         messageJPanel.setBounds(0, windowHeight - 120, windowWidth, 100);
         navJPanel.setBackground(new Color(18 ,140 ,126));
         // messageJPanel.setBackground(Color.green);
 
-
+      
         window.add(navJPanel);
         navJPanel.add(profilePicHolder);
+        navJPanel.add(navOptionButton);
+        navJPanel.add(arrowIconHolder);
         window.add(messageJPanel);
         window.setSize(windowWidth,windowHeight);
         window.setResizable(false);
@@ -62,9 +117,10 @@ class ClientSwing {
         window.setTitle("Nati whatsApp");
         
     }
+    //This method is used to convert the image from a rectangular frame to a circular frame
      void convertImageToCircular() throws IOException {
          
-         BufferedImage master = ImageIO.read(new File("cliprofilepic.jpeg"));
+         BufferedImage master = ImageIO.read(new File("Assets\\profilepic.jpeg"));
 
         // Get the diameter
         int diameter = Math.min(master.getWidth(), master.getHeight());
@@ -87,8 +143,8 @@ class ClientSwing {
         g2d.drawImage(mask, 0, 0, null);
         g2d.dispose();
 
-        // Save the result
-        ImageIO.write(circularImage, "PNG", new File("cliprofilepic.png"));
+        // Now we are saving the completely converted iamge into directory mentioned below as a png format 
+        ImageIO.write(circularImage, "PNG", new File("Assets\\cliprofilepic.png"));
      }
-
+     
 }
