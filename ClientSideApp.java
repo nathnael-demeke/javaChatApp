@@ -1,5 +1,6 @@
 import java.awt.Color;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -12,12 +13,14 @@ public class ClientSideApp {
 class ClientSwing {
     static JFrame window;
     JPanel navJPanel;
+    ImageIcon serverProfilePicture;
     JPanel messageJPanel;
     int windowWidth = 490;
     int windowHeight = 680;
    
     public ClientSwing() {
         window = new JFrame();
+        serverProfilePicture = new ImageIcon("");
         navJPanel = new JPanel();
         messageJPanel = new JPanel();
         window.setVisible(true);
@@ -28,7 +31,7 @@ class ClientSwing {
 
         navJPanel.setBounds(0, 0, windowWidth, 60);
         messageJPanel.setBounds(0, windowHeight - 120, windowWidth, 100);
-        navJPanel.setBackground(Color.black);
+        navJPanel.setBackground(new Color(18 ,140 ,126));
         messageJPanel.setBackground(Color.green);
 
 
