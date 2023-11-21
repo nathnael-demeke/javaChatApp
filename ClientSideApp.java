@@ -1,5 +1,6 @@
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -29,6 +30,7 @@ class ClientSwing {
     static JFrame window;
     JPanel navJPanel;
     ImageIcon serverProfilePicture;
+    ImageIcon sendButtIcon;
     JLabel atachmentHolder;
     ImageIcon attachImageIcon;
     ImageIcon threeDotIcon;
@@ -36,6 +38,7 @@ class ClientSwing {
     JTextField messageField;
     JLabel profilePicHolder;
     JLabel arrowIconHolder;
+    JLabel sendImageIconHolder;
     JButton navOptionButton;
     ImageIcon backgroundImage;
     int windowWidth = 490;
@@ -46,8 +49,11 @@ class ClientSwing {
         window = new JFrame();
         backgroundImage = new ImageIcon("Assets\\backgroundImage.jpeg");
         Image backImage = backgroundImage.getImage();
-        
-
+        sendImageIconHolder = new JLabel();
+        sendButtIcon = new ImageIcon("Assets\\send1.png");
+        Image sendImage = sendButtIcon.getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH);
+        sendButtIcon = new ImageIcon(sendImage);
+        sendImageIconHolder.setIcon(sendButtIcon);
         window.setContentPane(new ImagePanel(backImage));
         atachmentHolder = new JLabel();
         attachImageIcon = new ImageIcon("Assets\\attachment.png");
@@ -63,21 +69,22 @@ class ClientSwing {
         //The method down below will convert the "cliprofilepic.jpeg" image into a circular png image to make it appropriate for profile picture
         navJPanel = new JPanel();
         navJPanel.setLayout(null);
+        messageField.setFont(new Font("Arial", Font.PLAIN ,15));
 
         convertImageToCircular();
         serverProfilePicture = new ImageIcon("Assets\\cliprofilepic.png");
         
         Image profilePic = serverProfilePicture.getImage();
         ImageIcon backArrowIcon = new ImageIcon("Assets\\arrow.png");
-        Image threeDot = threeDotIcon.getImage().getScaledInstance(25, 30, java.awt.Image.SCALE_SMOOTH);
-        Image attachemntImage = attachImageIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        Image threeDot = threeDotIcon.getImage().getScaledInstance(25, 30, Image.SCALE_SMOOTH);
+        Image attachemntImage = attachImageIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 
         attachImageIcon = new ImageIcon(attachemntImage);
         Image backArrow = backArrowIcon.getImage();
         threeDotIcon = new ImageIcon(threeDot);
         
         
-        Image newProfilePicture = profilePic.getScaledInstance(60, 57, java.awt.Image.SCALE_SMOOTH);
+        Image newProfilePicture = profilePic.getScaledInstance(60, 57, Image.SCALE_SMOOTH);
         serverProfilePicture = new ImageIcon(newProfilePicture);
         profilePicHolder.setIcon(serverProfilePicture);
 
@@ -115,7 +122,7 @@ class ClientSwing {
         profilePicHolder.setForeground(Color.white);
         
         System.out.println(profilePicHolder.getText());
-
+        
         navJPanel.setBounds(0, 0, windowWidth, 60);
         atachmentHolder.setBounds(4, 2, 60, 60);
         messageField.setBounds(32, 12 , windowWidth - 100 , 40);
@@ -124,16 +131,20 @@ class ClientSwing {
         
         arrowIconHolder.setBounds(4,5,30,10);
         arrowIconHolder.setSize(30,50);
+        sendImageIconHolder.setBounds(426,564,50,50);
+        
         profilePicHolder.setIconTextGap(15);
         
         messageJPanel.setBounds(0, windowHeight - 120, windowWidth, 100);
         navJPanel.setBackground(new Color(18 ,140 ,126));
         // messageJPanel.setBackground(Color.green);
 
-       
-        window.add(navJPanel);
         messageJPanel.setOpaque(false);
+        window.add(navJPanel);
+        window.add(sendImageIconHolder);
+        
         messageJPanel.add(atachmentHolder);
+        
         messageJPanel.add(messageField);
         navJPanel.add(profilePicHolder);
         navJPanel.add(navOptionButton);
