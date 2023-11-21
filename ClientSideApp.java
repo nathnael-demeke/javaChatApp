@@ -10,7 +10,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
+import javax.swing.JComponent;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -37,12 +37,18 @@ class ClientSwing {
     JLabel profilePicHolder;
     JLabel arrowIconHolder;
     JButton navOptionButton;
+    ImageIcon backgroundImage;
     int windowWidth = 490;
     int windowHeight = 680;
 
    
     public ClientSwing() throws IOException {
         window = new JFrame();
+        backgroundImage = new ImageIcon("Assets\\backgroundImage.jpeg");
+        Image backImage = backgroundImage.getImage();
+        
+
+        window.setContentPane(new ImagePanel(backImage));
         atachmentHolder = new JLabel();
         attachImageIcon = new ImageIcon("Assets\\attachment.png");
         messageField = new RoundJTextField(20);
@@ -100,6 +106,7 @@ class ClientSwing {
         
 
         window.setVisible(true);
+        
         window.setLayout(null);
         navOptionButton.setFocusable(false);
         
@@ -125,6 +132,7 @@ class ClientSwing {
 
        
         window.add(navJPanel);
+        messageJPanel.setOpaque(false);
         messageJPanel.add(atachmentHolder);
         messageJPanel.add(messageField);
         navJPanel.add(profilePicHolder);
@@ -159,6 +167,7 @@ class ClientSwing {
         g2d = circularImage.createGraphics();
         int x = (diameter - master.getWidth()) / 2;
         int y = (diameter - master.getHeight()) / 2;
+        
         g2d.drawImage(master, x, y, null);
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_IN));
         g2d.drawImage(mask, 0, 0, null);
@@ -168,7 +177,12 @@ class ClientSwing {
         ImageIO.write(circularImage, "PNG", new File("Assets\\cliprofilepic.png"));
      }
      
-}class RoundJTextField extends JTextField {
+}
+
+
+
+
+class RoundJTextField extends JTextField {
     private Shape shape;
     public RoundJTextField(int size) {
         super(size);
@@ -188,5 +202,17 @@ class ClientSwing {
              shape = new RoundRectangle2D.Float(0, 0, getWidth()-1, getHeight()-1, 15, 15);
          }
          return shape.contains(x, y);
+    }
+}
+
+class ImagePanel extends JComponent {
+    private Image image;
+    public ImagePanel(Image image) {
+        this.image = image;
+    }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(image, 0, 0, this);
     }
 }
