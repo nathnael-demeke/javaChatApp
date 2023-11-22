@@ -1,19 +1,12 @@
 import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Shape;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
-
-import javax.swing.JComponent;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -45,7 +38,6 @@ public class GUI {
     public GUI() throws IOException {
         window = new JFrame();
         
-        windowTitle = "";
         backgroundImage = new ImageIcon("Assets\\backgroundImage.jpeg");
         Image backImage = backgroundImage.getImage();
         sendImageIconHolder = new JLabel();
@@ -53,6 +45,8 @@ public class GUI {
         Image sendImage = sendButtIcon.getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH);
         sendButtIcon = new ImageIcon(sendImage);
         sendImageIconHolder.setIcon(sendButtIcon);
+
+        //setting the background image for the window or the JFrame.
         window.setContentPane(new ImagePanel(backImage));
         atachmentHolder = new JLabel();
         attachImageIcon = new ImageIcon("Assets\\attachment.png");
@@ -61,15 +55,17 @@ public class GUI {
         navOptionButton = new JButton();
         threeDotIcon = new ImageIcon("Assets\\the_dot.png");
         arrowIconHolder = new JLabel();
+        //FlowLayout allow me to put the profile picture and name side by side
         profilePicHolder.setLayout(new FlowLayout());
         messageJPanel = new JPanel();
+        //setting the profile picture layout to be null so that i can arrang the icons as I want
         messageJPanel.setLayout(null);
-
-        //The method down below will convert the "cliprofilepic.jpeg" image into a circular png image to make it appropriate for profile picture
         navJPanel = new JPanel();
         navJPanel.setLayout(null);
+        //Enlarging the text inside of the messaging tab
         messageField.setFont(new Font("Arial", Font.PLAIN ,15));
-
+        
+        //This method will convert the rectangular image into circular image
         convertImageToCircular();
         
         ImageIcon backArrowIcon = new ImageIcon("Assets\\arrow.png");
@@ -83,36 +79,25 @@ public class GUI {
         
        
         
-
-        profilePicHolder.setBackground(Color.blue);
+       
+        
         atachmentHolder.setIcon(attachImageIcon);
         navOptionButton.setBackground(null);
         navOptionButton.setBorder(null);
         // messageJPanel.setBackground(Color.black);
         navOptionButton.setIcon(threeDotIcon);
-        
-        
-        
-        // Image newBackArrowImage = shrinkImage(backArrow, windowWidth, windowHeight);
-        // backArrowIcon = new ImageIcon(newBackArrowImage);
+
+        //resizing the backarrow image(shrinking)
         Image backarrImage = backArrow.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
         arrowIconHolder.setIcon(new ImageIcon(backarrImage));
-        
-        
-        System.out.println(backArrowIcon);
-        
-        
+        System.out.println(backArrowIcon); 
         profilePicHolder.setSize(50,45);
-        
-        
 
-        
 
-        window.setVisible(true);
-        
-        window.setLayout(null);
+       
+
+
         navOptionButton.setFocusable(false);
-        
         // profilePicHolder.setText("Abebe Demelash");
         profilePicHolder.setFont(new Font("Arial", Font.BOLD , 20));
         profilePicHolder.setForeground(Color.white);
@@ -134,7 +119,7 @@ public class GUI {
         messageJPanel.setBounds(0, windowHeight - 120, windowWidth, 100);
         navJPanel.setBackground(new Color(18 ,140 ,126));
         // messageJPanel.setBackground(Color.green);
-
+        // will set the background color of the bottom nav bar to transparent
         messageJPanel.setOpaque(false);
         window.add(navJPanel);
         window.add(sendImageIconHolder);
@@ -147,8 +132,14 @@ public class GUI {
         navJPanel.add(arrowIconHolder);
         window.add(messageJPanel);
         window.setSize(windowWidth,windowHeight);
+
+        
+        //i have made the window have a fixed size no one can change it while runnin
         window.setResizable(false);
         window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
+         window.setVisible(true);
+        //null is the layout because i wanted to arrange everything like i wanted   
+        window.setLayout(null);
 
         window.setTitle(windowTitle); 
         System.out.println("program begins");
@@ -158,7 +149,7 @@ public class GUI {
      
      
 }
-
+    //convert image to a circular png image
     private void convertImageToCircular() throws IOException{
 
         BufferedImage master = ImageIO.read(new File("Assets\\profilepic.jpeg"));
@@ -188,9 +179,12 @@ public class GUI {
         // Now we are saving the completely converted iamge into directory mentioned below as a png format 
         ImageIO.write(circularImage, "PNG", new File("Assets\\cliprofilepic.png"));
     }
+    //used to set the title of the JFrame
     public void setWindowTitle(String titile) {
         window.setTitle(titile);
     }
+
+    //used to set the profilePicture of the window or JFrame
     public void setProfilePicture (String imagePath) {
         serverProfilePicture = new ImageIcon(imagePath);
         Image profilePic = serverProfilePicture.getImage();
@@ -198,6 +192,7 @@ public class GUI {
         serverProfilePicture = new ImageIcon(newProfilePicture);
         profilePicHolder.setIcon(serverProfilePicture);
     }
+    //this method will set the profile name of the other user
     public void setProfileName (String name) {
          profilePicHolder.setText(name);
     }
