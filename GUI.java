@@ -57,7 +57,7 @@ public class GUI {
         atachmentHolder = new JLabel();
         attachImageIcon = new ImageIcon("Assets\\attachment.png");
         messageField = new RoundJTextField(20);
-        profilePicHolder = new JLabel("Abebe Demelash");
+        profilePicHolder = new JLabel();
         navOptionButton = new JButton();
         threeDotIcon = new ImageIcon("Assets\\the_dot.png");
         arrowIconHolder = new JLabel();
@@ -197,6 +197,9 @@ public class GUI {
          Image newProfilePicture = profilePic.getScaledInstance(60, 57, Image.SCALE_SMOOTH);
         serverProfilePicture = new ImageIcon(newProfilePicture);
         profilePicHolder.setIcon(serverProfilePicture);
+    }
+    public void setProfileName (String name) {
+         profilePicHolder.setText(name);
     }
 
     }

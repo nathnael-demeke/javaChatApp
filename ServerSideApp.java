@@ -1,34 +1,34 @@
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.FileReader;
 import java.io.Writer;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.file.Paths;
 
-import javax.imageio.ImageIO;
-
-import java.awt.image.BufferedImage;
 
 
 public class ServerSideApp {
     public static void main(String[] args) throws IOException {
+        String serverProfileString = "Hermela Solomon";
         GUI serverGui = new GUI();
-        
-
+        serverGui.setProfileName(serverProfileString);
         serverGui.setWindowTitle("Nati Server WhatsApp");
+
+
         ServerSocket sendProfilePic = new ServerSocket(53);
+        ServerSocket profileNameSocket = new ServerSocket(12);
+        Socket profilSocket = profileNameSocket.accept();
+
+        OutputStream sendProfileName = profilSocket.getOutputStream();
+        Writer writer = new OutputStreamWriter(sendProfileName, "UTF-8");
+        writer.write(serverProfileString);
+        writer.flush();
+        profileNameSocket.close();
+        sendProfileName.close();
+
         Socket pictureSocket = sendProfilePic.accept();
         OutputStream out = pictureSocket.getOutputStream();
         BufferedInputStream read = new BufferedInputStream(new FileInputStream("cliprofilepic.png"));

@@ -1,27 +1,27 @@
-
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import javax.imageio.ImageIO;
 
 public class ClientSideApp {
     public static void main(String[] args) throws IOException {
-       Thread downloading = new Thread();
-        Socket profilePicturSocket = new Socket("localhost",53);
+        String serverAddress = "localhost";
+        Socket profilePicturSocket = new Socket(serverAddress,53);
+        Socket profileName = new Socket(serverAddress,12);
+        InputStream recieveProfile =  profileName.getInputStream();
+        Reader reader = new InputStreamReader(recieveProfile, "UTF-8");
+        BufferedReader readName = new BufferedReader(reader);
+
         
         InputStream in = profilePicturSocket.getInputStream();
         if(new File("fuck.png").exists()) {
             System.out.println("there is already fuck.png");
-            
         }
         else {
             
@@ -29,6 +29,8 @@ public class ClientSideApp {
         }
 
         GUI clientGui = new GUI();
+        clientGui.setProfileName(readName.readLine());
+        
          clientGui.setProfilePicture("fuck.png");
         
         
