@@ -11,6 +11,8 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+
 import javax.swing.JComponent;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -21,7 +23,10 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 public class GUI {
-    public GUI() throws IOException {
+    public String windowTitle;
+    int windowWidth = 490;
+    int windowHeight = 680;
+    public String profilePictureImagePathString;
     JFrame window;
     JPanel navJPanel;
     ImageIcon serverProfilePicture;
@@ -36,12 +41,11 @@ public class GUI {
     JLabel sendImageIconHolder;
     JButton navOptionButton;
     ImageIcon backgroundImage;
-    int windowWidth = 490;
-    int windowHeight = 680;
-
-   
-
+    
+    public GUI() throws IOException {
         window = new JFrame();
+        
+        windowTitle = "";
         backgroundImage = new ImageIcon("Assets\\backgroundImage.jpeg");
         Image backImage = backgroundImage.getImage();
         sendImageIconHolder = new JLabel();
@@ -67,9 +71,7 @@ public class GUI {
         messageField.setFont(new Font("Arial", Font.PLAIN ,15));
 
         convertImageToCircular();
-        serverProfilePicture = new ImageIcon("Assets\\cliprofilepic.png");
         
-        Image profilePic = serverProfilePicture.getImage();
         ImageIcon backArrowIcon = new ImageIcon("Assets\\arrow.png");
         Image threeDot = threeDotIcon.getImage().getScaledInstance(25, 30, Image.SCALE_SMOOTH);
         Image attachemntImage = attachImageIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -79,9 +81,8 @@ public class GUI {
         threeDotIcon = new ImageIcon(threeDot);
         
         
-        Image newProfilePicture = profilePic.getScaledInstance(60, 57, Image.SCALE_SMOOTH);
-        serverProfilePicture = new ImageIcon(newProfilePicture);
-        profilePicHolder.setIcon(serverProfilePicture);
+       
+        
 
         profilePicHolder.setBackground(Color.blue);
         atachmentHolder.setIcon(attachImageIcon);
@@ -149,7 +150,8 @@ public class GUI {
         window.setResizable(false);
         window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
 
-        window.setTitle("Nati whatsApp");
+        window.setTitle(windowTitle); 
+        System.out.println("program begins");
         
     
     //This method is used to convert the image from a rectangular frame to a circular frame
@@ -186,7 +188,16 @@ public class GUI {
         // Now we are saving the completely converted iamge into directory mentioned below as a png format 
         ImageIO.write(circularImage, "PNG", new File("Assets\\cliprofilepic.png"));
     }
-
+    public void setWindowTitle(String titile) {
+        window.setTitle(titile);
+    }
+    public void setProfilePicture (String imagePath) {
+        serverProfilePicture = new ImageIcon(imagePath);
+        Image profilePic = serverProfilePicture.getImage();
+         Image newProfilePicture = profilePic.getScaledInstance(60, 57, Image.SCALE_SMOOTH);
+        serverProfilePicture = new ImageIcon(newProfilePicture);
+        profilePicHolder.setIcon(serverProfilePicture);
+    }
 
     }
 
