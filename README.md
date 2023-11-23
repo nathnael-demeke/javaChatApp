@@ -9,3 +9,8 @@ System Design
 
 - i have designed the system so that if it the first time that the server and the client are connected will exchange their profile pictures and they will save it for their future use.
 . Second they will exchange their profile Names. Then the program will start.
+
+  Ports Used
+- 53 --- sending the profile picture 
+- 12  --- sending the profile names
+- 19 ---- sending messages between each-other

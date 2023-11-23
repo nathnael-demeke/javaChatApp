@@ -234,7 +234,7 @@ public class GUI {
         first.setSize(textArea.getWidth(), textArea.getHeight());
         first.setBackground(Color.black);
         first.add(textArea);
-        first.setBounds(12,y,200,50);
+        first.setBounds(12, y , 200,50);
 
         textingPanel.add(first);
     }

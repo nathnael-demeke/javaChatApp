@@ -11,18 +11,24 @@ import java.net.Socket;
 
 
 public class ServerSideApp {
+    static ServerSocket chattingSocket;
+    static Socket chattin;
     public static void main(String[] args) throws IOException {
         String serverProfileString = "Hermela Solomon";
+        
         GUI serverGui = new GUI();
          serverGui.getMessage("heel000",100);
         serverGui.getMessage("fuckno",200);
         serverGui.setProfileName(serverProfileString);
         serverGui.setWindowTitle("Nati Server WhatsApp");
+        
 
 
         ServerSocket sendProfilePic = new ServerSocket(53);
         ServerSocket profileNameSocket = new ServerSocket(12);
-        ServerSocket sendMessagesServerSocket = new ServerSocket(19);
+        chattingSocket =  new ServerSocket(19);
+        chattin = chattingSocket.accept();
+        
         Socket profilSocket = profileNameSocket.accept();
 
         OutputStream sendProfileName = profilSocket.getOutputStream();
@@ -39,17 +45,11 @@ public class ServerSideApp {
         
 
         
-        Socket messagSocket = sendMessagesServerSocket.accept();
-
-        OutputStream messageOutputStream = messagSocket.getOutputStream();
-        Writer writeOverMessageSocket = new OutputStreamWriter(messageOutputStream, "UTF-8");
-        writeOverMessageSocket.write("did you get the message");
-        writeOverMessageSocket.flush();
-        writeOverMessageSocket.close();
-        messagSocket.close();
+        
         
 
-
+       sendMessageThroughSocket("I dont like gay people", serverGui ,12);
+       
         
        byte[] bytes = new byte[4096];
        int i;
@@ -63,4 +63,13 @@ public class ServerSideApp {
         
         
     }
+    public static void sendMessageThroughSocket(String message, GUI gui, int y) throws IOException {
+        gui.sendMessage(message, y);
+        OutputStream out = chattin.getOutputStream();
+        Writer write = new OutputStreamWriter(out, "UTF-8");
+        write.write(message);
+        write.flush();
+        
+    }
 }
+

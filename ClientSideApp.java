@@ -38,6 +38,8 @@ public class ClientSideApp {
         clientGui.getMessage(readingMessage.readLine(), 10);
         
          clientGui.setProfilePicture("fuck.png");
+         System.out.println("the message is set " + readingMessage.readLine());
+         clientGui.getMessage(readingMessage.readLine(), 0);
         
         
         
