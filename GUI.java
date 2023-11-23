@@ -1,10 +1,12 @@
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import javax.swing.JScrollPane;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -12,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
@@ -23,6 +26,7 @@ public class GUI {
     JFrame window;
     JPanel navJPanel;
     ImageIcon serverProfilePicture;
+    JScrollPane textingPanel;
     ImageIcon sendButtIcon;
     JLabel atachmentHolder;
     ImageIcon attachImageIcon;
@@ -34,10 +38,13 @@ public class GUI {
     JLabel sendImageIconHolder;
     JButton navOptionButton;
     ImageIcon backgroundImage;
+    JTextArea messagesArea;
     
     public GUI() throws IOException {
         window = new JFrame();
-        
+        textingPanel = new JScrollPane();
+        textingPanel.setLayout(null);
+        textingPanel.setVisible(true);
         backgroundImage = new ImageIcon("Assets\\backgroundImage.jpeg");
         Image backImage = backgroundImage.getImage();
         sendImageIconHolder = new JLabel();
@@ -82,6 +89,7 @@ public class GUI {
        
         
         atachmentHolder.setIcon(attachImageIcon);
+        textingPanel.setOpaque(false);
         navOptionButton.setBackground(null);
         navOptionButton.setBorder(null);
         // messageJPanel.setBackground(Color.black);
@@ -92,6 +100,8 @@ public class GUI {
         arrowIconHolder.setIcon(new ImageIcon(backarrImage));
         System.out.println(backArrowIcon); 
         profilePicHolder.setSize(50,45);
+        textingPanel.setSize(windowWidth, 200);
+
 
 
        
@@ -101,15 +111,13 @@ public class GUI {
         // profilePicHolder.setText("Abebe Demelash");
         profilePicHolder.setFont(new Font("Arial", Font.BOLD , 20));
         profilePicHolder.setForeground(Color.white);
-        
-        System.out.println(profilePicHolder.getText());
-        
         navJPanel.setBounds(0, 0, windowWidth, 60);
+        textingPanel.setBounds(0,65,windowWidth - 15,500);
+        textingPanel.setBackground(null);
         atachmentHolder.setBounds(4, 2, 60, 60);
         messageField.setBounds(32, 12 , windowWidth - 100 , 40);
         navOptionButton.setBounds(windowWidth - 45, 5, 20 , 50);
         profilePicHolder.setBounds(32, 3,windowWidth - 90,58);
-        
         arrowIconHolder.setBounds(4,5,30,10);
         arrowIconHolder.setSize(30,50);
         sendImageIconHolder.setBounds(426,564,50,50);
@@ -131,6 +139,7 @@ public class GUI {
         navJPanel.add(navOptionButton);
         navJPanel.add(arrowIconHolder);
         window.add(messageJPanel);
+        window.add(textingPanel);
         window.setSize(windowWidth,windowHeight);
 
         
@@ -140,7 +149,7 @@ public class GUI {
          window.setVisible(true);
         //null is the layout because i wanted to arrange everything like i wanted   
         window.setLayout(null);
-
+        
         window.setTitle(windowTitle); 
         System.out.println("program begins");
         
@@ -149,6 +158,11 @@ public class GUI {
      
      
 }
+
+
+
+
+
     //convert image to a circular png image
     private void convertImageToCircular() throws IOException{
 
@@ -196,6 +210,20 @@ public class GUI {
     public void setProfileName (String name) {
          profilePicHolder.setText(name);
     }
+    public void getMessage(String messageText, int y) {
+        JPanel first = new JPanel();
+        JTextArea textArea = new JTextArea();
+        textArea.setSize(first.getWidth(), first.getHeight());
+        textArea.setText(messageText);
+        textArea.setFont(new Font("Arial", Font.TYPE1_FONT,16));
+        first.setSize(textArea.getWidth(), textArea.getHeight());
+        first.setBackground(Color.black);
+        first.add(textArea);
+        first.setBounds(windowWidth - 220,y,200,50);
+
+        textingPanel.add(first);
+
+    } 
 
     }
 

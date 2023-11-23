@@ -14,6 +14,8 @@ public class ServerSideApp {
     public static void main(String[] args) throws IOException {
         String serverProfileString = "Hermela Solomon";
         GUI serverGui = new GUI();
+        serverGui.getMessage("heel000",100);
+        serverGui.getMessage("fuckno",200);
         serverGui.setProfileName(serverProfileString);
         serverGui.setWindowTitle("Nati Server WhatsApp");
 
