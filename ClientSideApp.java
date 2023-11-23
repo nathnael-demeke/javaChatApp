@@ -14,6 +14,11 @@ public class ClientSideApp {
         String serverAddress = "localhost";
         Socket profilePicturSocket = new Socket(serverAddress,53);
         Socket profileName = new Socket(serverAddress,12);
+        Socket reciveMessageFromServer = new Socket(serverAddress, 19);
+        reciveMessageFromServer.setSoTimeout(10000);
+        InputStreamReader readMessageFromServer = new InputStreamReader(reciveMessageFromServer.getInputStream(), "UTF-8");
+        BufferedReader readingMessage = new BufferedReader(readMessageFromServer);
+        
         InputStream recieveProfile =  profileName.getInputStream();
         Reader reader = new InputStreamReader(recieveProfile, "UTF-8");
         BufferedReader readName = new BufferedReader(reader);
@@ -30,6 +35,7 @@ public class ClientSideApp {
 
         GUI clientGui = new GUI();
         clientGui.setProfileName(readName.readLine());
+        clientGui.getMessage(readingMessage.readLine(), 10);
         
          clientGui.setProfilePicture("fuck.png");
         

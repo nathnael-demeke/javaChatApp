@@ -14,7 +14,7 @@ public class ServerSideApp {
     public static void main(String[] args) throws IOException {
         String serverProfileString = "Hermela Solomon";
         GUI serverGui = new GUI();
-        serverGui.getMessage("heel000",100);
+         serverGui.getMessage("heel000",100);
         serverGui.getMessage("fuckno",200);
         serverGui.setProfileName(serverProfileString);
         serverGui.setWindowTitle("Nati Server WhatsApp");
@@ -22,6 +22,7 @@ public class ServerSideApp {
 
         ServerSocket sendProfilePic = new ServerSocket(53);
         ServerSocket profileNameSocket = new ServerSocket(12);
+        ServerSocket sendMessagesServerSocket = new ServerSocket(19);
         Socket profilSocket = profileNameSocket.accept();
 
         OutputStream sendProfileName = profilSocket.getOutputStream();
@@ -34,6 +35,20 @@ public class ServerSideApp {
         Socket pictureSocket = sendProfilePic.accept();
         OutputStream out = pictureSocket.getOutputStream();
         BufferedInputStream read = new BufferedInputStream(new FileInputStream("cliprofilepic.png"));
+
+        
+
+        
+        Socket messagSocket = sendMessagesServerSocket.accept();
+
+        OutputStream messageOutputStream = messagSocket.getOutputStream();
+        Writer writeOverMessageSocket = new OutputStreamWriter(messageOutputStream, "UTF-8");
+        writeOverMessageSocket.write("did you get the message");
+        writeOverMessageSocket.flush();
+        writeOverMessageSocket.close();
+        messagSocket.close();
+        
+
 
         
        byte[] bytes = new byte[4096];

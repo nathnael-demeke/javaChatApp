@@ -22,6 +22,7 @@ public class GUI {
     public String windowTitle;
     int windowWidth = 490;
     int windowHeight = 680;
+    public int totalMessages;
     public String profilePictureImagePathString;
     JFrame window;
     JPanel navJPanel;
@@ -219,11 +220,27 @@ public class GUI {
         first.setSize(textArea.getWidth(), textArea.getHeight());
         first.setBackground(Color.black);
         first.add(textArea);
-        first.setBounds(windowWidth - 220,y,200,50);
+        first.setBounds(windowWidth - 215,y,200,50);
 
         textingPanel.add(first);
 
     } 
+    public void sendMessage(String message, int y) {
+         JPanel first = new JPanel();
+        JTextArea textArea = new JTextArea();
+        textArea.setSize(first.getWidth(), first.getHeight());
+        textArea.setText(message);
+        textArea.setFont(new Font("Arial", Font.TYPE1_FONT,16));
+        first.setSize(textArea.getWidth(), textArea.getHeight());
+        first.setBackground(Color.black);
+        first.add(textArea);
+        first.setBounds(12,y,200,50);
+
+        textingPanel.add(first);
+    }
+    public String getTextFieldInput() {
+         return messageField.getText();
+    }
 
     }
 
