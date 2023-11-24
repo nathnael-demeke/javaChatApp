@@ -55,7 +55,7 @@ public class ServerSideApp {
        while((i = read.read(bytes)) != -1) {
             out.write(bytes, 0 , i);
        }
-        
+       
        pictureSocket.close();
        System.out.println("the Server is ready to chat...");
         

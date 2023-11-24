@@ -19,14 +19,11 @@ public class ClientSideApp {
     public static void main(String[] args) throws IOException, InterruptedException {
         String serverAddress = "localhost";
         Socket reciveMessageFromServer = new Socket(serverAddress, 19);
-        System.out.println("port 19 passed");
         Socket profilePicturSocket = new Socket(serverAddress,53);
         profilePicturSocket.setSoTimeout(100000);
-        System.out.println("port 53 passed...");
         Socket profileName = new Socket(serverAddress,12);
         
         InputStreamReader readMessageFromServer = new InputStreamReader(reciveMessageFromServer.getInputStream(), "UTF-8");
-        BufferedReader readingMessage = new BufferedReader(readMessageFromServer);
         
         InputStream recieveProfile =  profileName.getInputStream();
         Reader reader = new InputStreamReader(recieveProfile, "UTF-8");
@@ -45,24 +42,32 @@ public class ClientSideApp {
 
         GUI clientGui = new GUI();
     
-        clientGui.setProfileName(readName.readLine());
+        clientGui.setProfileName("NATI");
         
         clientGui.setProfilePicture("fuck.png");
-        System.out.println("working so far line: 51");
+        
 
-        String readString = readingMessage.readLine();
+        // String readString = readingMessage.readLine();
        
         // while (true) {
-          
-          
-        
         System.out.println("the clinet is ready to chat ....");
-        System.out.println(readString);
-        clientGui.getMessage(readString, 55);
-       if (readString != null) {
-           clientGui.setProfileName(readString);
-       }
+    
         
+    //    if () {
+    //       
+    //    }
+    String actualMessage = "";
+    int i;
+    byte[] bytes = new byte[1024];
+    StringBuilder stringBuilder = new StringBuilder();
+    
+        while ((i = readMessageFromServer.read()) != -1) {
+            stringBuilder.append((char)i);
+            System.out.println("hey " + i);
+            System.out.println("this is " + stringBuilder.toString());
+        }
+        System.out.println(stringBuilder.toString());
+        clientGui.getMessage(stringBuilder.toString(),15);
         System.out.println("finished");
 
         

@@ -231,7 +231,7 @@ public class GUI implements KeyListener{
         textArea1.setSize(first.getWidth(), first.getHeight());
         textArea1.setText(messageText);
         textArea1.setFont(new Font("Arial", Font.TYPE1_FONT,16));
-
+         textArea1.setBackground(Color.getColor("25D366"));
         first.setSize(200, 50);
         // first.setBackground(Color.black);
         first.setOpaque(false);
@@ -240,7 +240,7 @@ public class GUI implements KeyListener{
         first.setBounds(windowWidth - 215,y,200,50);
 
         textingPanel.add(first);
-        first.setBounds(windowWidth - 215,100,200,50);
+        // first.setBounds(windowWidth - 215,100,200,50);
         textingPanel.add(first);
         textingPanel.revalidate();
 
@@ -290,16 +290,21 @@ public class GUI implements KeyListener{
             System.out.println("the enter button have been pressed");
             String message = messageField.getText();
             try {
+                // if the user is a server then it will try to send message from server to client
+        
                 if (isServer) {
                 
                 chat = chattingSocket.accept();
                 OutputStream out = chat.getOutputStream();
                 BufferedOutputStream outputStream = new BufferedOutputStream(out);
-                Writer write = new OutputStreamWriter(outputStream, "UTF-8");
-                write.write(message);
-                messageField.setText("");
-                write.flush();
-                write.close();
+                
+                // Writer write = new OutputStreamWriter(outputStream, "UTF-8");
+                byte[] bytes = message.getBytes("UTF-8");
+
+                for (byte bite : bytes) {
+                    out.write(bite);
+                    System.out.println("hey this is " + bite);
+                }
                 System.out.println("line 298: the OutputStream is closed");
                 
             }
