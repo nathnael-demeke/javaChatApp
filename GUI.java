@@ -10,6 +10,8 @@ import java.io.Writer;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.swing.JScrollPane;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -63,6 +65,7 @@ public class GUI implements KeyListener{
         Image sendImage = sendButtIcon.getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH);
         sendButtIcon = new ImageIcon(sendImage);
         sendImageIconHolder.setIcon(sendButtIcon);
+        
 
         //setting the background image for the window or the JFrame.
         window.setContentPane(new ImagePanel(backImage));
@@ -229,7 +232,7 @@ public class GUI implements KeyListener{
         textArea1.setText(messageText);
         textArea1.setFont(new Font("Arial", Font.TYPE1_FONT,16));
 
-        first.setSize(textArea1.getWidth(), textArea1.getHeight());
+        first.setSize(200, 50);
         // first.setBackground(Color.black);
         first.setOpaque(false);
         textArea1.setEditable(false);
@@ -239,6 +242,7 @@ public class GUI implements KeyListener{
         textingPanel.add(first);
         first.setBounds(windowWidth - 215,100,200,50);
         textingPanel.add(first);
+        textingPanel.revalidate();
 
     } 
     public void sendMessage(String message, int y, int x) {
@@ -290,11 +294,14 @@ public class GUI implements KeyListener{
                 
                 chat = chattingSocket.accept();
                 OutputStream out = chat.getOutputStream();
-                Writer write = new OutputStreamWriter(out, "UTF-8");
+                BufferedOutputStream outputStream = new BufferedOutputStream(out);
+                Writer write = new OutputStreamWriter(outputStream, "UTF-8");
                 write.write(message);
+                messageField.setText("");
                 write.flush();
                 write.close();
-                messageField.setText("");
+                System.out.println("line 298: the OutputStream is closed");
+                
             }
             } catch (Exception exception) {
                 // TODO: handle exception

@@ -48,6 +48,8 @@ public class ClientSideApp {
         clientGui.setProfileName(readName.readLine());
         
         clientGui.setProfilePicture("fuck.png");
+        System.out.println("working so far line: 51");
+
         String readString = readingMessage.readLine();
        
         // while (true) {
@@ -55,9 +57,11 @@ public class ClientSideApp {
           
         
         System.out.println("the clinet is ready to chat ....");
-        // clientGui.getMessage(readString, 55);
         System.out.println(readString);
-        clientGui.getMessage(readString, 23);
+        clientGui.getMessage(readString, 55);
+       if (readString != null) {
+           clientGui.setProfileName(readString);
+       }
         
         System.out.println("finished");
 
