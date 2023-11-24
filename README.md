@@ -14,3 +14,9 @@ System Design
 - 53 --- sending the profile picture 
 - 12  --- sending the profile names
 - 19 ---- sending messages between each-other
+
+
+  Methods implemented for GUI.class
+
+- isServer ---- you need to set this to true if you are using serverSideApp
+- setProfileName ---- we use this method to set the name of the user on the navJpanel(the green bar)

@@ -4,6 +4,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.swing.JScrollPane;
@@ -13,16 +16,23 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class GUI {
+public class GUI implements KeyListener{
     public String windowTitle;
+    public boolean isServer;
     int windowWidth = 490;
     int windowHeight = 680;
     public int totalMessages;
+    public ServerSocket chattingSocket;
+    static Socket chat;
     public String profilePictureImagePathString;
     JFrame window;
     JPanel navJPanel;
@@ -41,7 +51,7 @@ public class GUI {
     ImageIcon backgroundImage;
     JTextArea messagesArea;
     
-    public GUI() throws IOException {
+    public GUI() throws IOException { 
         window = new JFrame();
         textingPanel = new JScrollPane();
         textingPanel.setLayout(null);
@@ -99,7 +109,7 @@ public class GUI {
         //resizing the backarrow image(shrinking)
         Image backarrImage = backArrow.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
         arrowIconHolder.setIcon(new ImageIcon(backarrImage));
-        System.out.println(backArrowIcon); 
+         
         profilePicHolder.setSize(50,45);
         textingPanel.setSize(windowWidth, 200);
 
@@ -143,7 +153,7 @@ public class GUI {
         window.add(textingPanel);
         window.setSize(windowWidth,windowHeight);
 
-        
+        messageField.addKeyListener(this);
         //i have made the window have a fixed size no one can change it while runnin
         window.setResizable(false);
         window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
@@ -152,7 +162,7 @@ public class GUI {
         window.setLayout(null);
         
         window.setTitle(windowTitle); 
-        System.out.println("program begins");
+        
         
     
     //This method is used to convert the image from a rectangular frame to a circular frame
@@ -213,34 +223,97 @@ public class GUI {
     }
     public void getMessage(String messageText, int y) {
         JPanel first = new JPanel();
-        JTextArea textArea = new JTextArea();
-        textArea.setSize(first.getWidth(), first.getHeight());
-        textArea.setText(messageText);
-        textArea.setFont(new Font("Arial", Font.TYPE1_FONT,16));
-        first.setSize(textArea.getWidth(), textArea.getHeight());
-        first.setBackground(Color.black);
-        first.add(textArea);
+        JTextArea textArea1 = new JTextArea();
+        
+        textArea1.setSize(first.getWidth(), first.getHeight());
+        textArea1.setText(messageText);
+        textArea1.setFont(new Font("Arial", Font.TYPE1_FONT,16));
+
+        first.setSize(textArea1.getWidth(), textArea1.getHeight());
+        // first.setBackground(Color.black);
+        first.setOpaque(false);
+        textArea1.setEditable(false);
+        first.add(textArea1);
         first.setBounds(windowWidth - 215,y,200,50);
 
         textingPanel.add(first);
+        first.setBounds(windowWidth - 215,100,200,50);
+        textingPanel.add(first);
 
     } 
-    public void sendMessage(String message, int y) {
+    public void sendMessage(String message, int y, int x) {
          JPanel first = new JPanel();
         JTextArea textArea = new JTextArea();
+        textArea.setBackground(Color.green);
         textArea.setSize(first.getWidth(), first.getHeight());
         textArea.setText(message);
         textArea.setFont(new Font("Arial", Font.TYPE1_FONT,16));
+        
         first.setSize(textArea.getWidth(), textArea.getHeight());
         first.setBackground(Color.black);
+        textArea.setEditable(false);
         first.add(textArea);
-        first.setBounds(12, y , 200,50);
+        first.setBounds(x, y , 200,50);
 
         textingPanel.add(first);
     }
     public String getTextFieldInput() {
          return messageField.getText();
     }
+    public void connectAsServer(ServerSocket soc) {
+        chattingSocket = soc;
+    }
+
+
+
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+   
+  
+
+
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        
+        // TODO Auto-generated method stub
+       if(e.getKeyCode() == KeyEvent.VK_ENTER) { 
+            System.out.println("the enter button have been pressed");
+            String message = messageField.getText();
+            try {
+                if (isServer) {
+                
+                chat = chattingSocket.accept();
+                OutputStream out = chat.getOutputStream();
+                Writer write = new OutputStreamWriter(out, "UTF-8");
+                write.write(message);
+                write.flush();
+                write.close();
+                messageField.setText("");
+            }
+            } catch (Exception exception) {
+                // TODO: handle exception
+                System.out.println(" there is a problem faced while sending your message in GUI.java");
+            }
+        }
+
+    }
+
+
+
+
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+   
 
     }
 
