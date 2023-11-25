@@ -14,3 +14,9 @@ System Design
 - 53 --- sending the profile picture 
 - 12  --- sending the profile names
 - 19 ---- sending messages between each-other
+- 1 ---- we are trying to send the amount of text that is send so that our program can know if the string was sent completely
+
+  Methods implemented for GUI.class
+
+- isServer ---- you need to set this to true if you are using serverSideApp
+- setProfileName ---- we use this method to set the name of the user on the navJpanel(the green bar)

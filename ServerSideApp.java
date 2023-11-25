@@ -1,4 +1,3 @@
-
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,30 +6,32 @@ import java.io.Writer;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-
+import java.util.Timer;
 
 public class ServerSideApp {
+
+    static boolean isServer;
     static ServerSocket chattingSocket;
-    static Socket chattin;
+    static ServerSocket lenghSocket;
+    static Socket chat;
     public static void main(String[] args) throws IOException {
         String serverProfileString = "Hermela Solomon";
-        
+        chattingSocket =  new ServerSocket(19);
+        lenghSocket = new ServerSocket(1);
         GUI serverGui = new GUI();
-         serverGui.getMessage("heel000",100);
-        serverGui.getMessage("fuckno",200);
+        serverGui.connectAsServer(chattingSocket,lenghSocket);
+        ServerSocket sendProfilePic = new ServerSocket(53);
+        sendProfilePic.setSoTimeout(1000);
+        ServerSocket profileNameSocket = new ServerSocket(12);
         serverGui.setProfileName(serverProfileString);
+        serverGui.isServer = true;
         serverGui.setWindowTitle("Nati Server WhatsApp");
         
 
 
-        ServerSocket sendProfilePic = new ServerSocket(53);
-        ServerSocket profileNameSocket = new ServerSocket(12);
-        chattingSocket =  new ServerSocket(19);
-        chattin = chattingSocket.accept();
         
         Socket profilSocket = profileNameSocket.accept();
-
+        // chat = chattingSocket.accept();
         OutputStream sendProfileName = profilSocket.getOutputStream();
         Writer writer = new OutputStreamWriter(sendProfileName, "UTF-8");
         writer.write(serverProfileString);
@@ -42,34 +43,39 @@ public class ServerSideApp {
         OutputStream out = pictureSocket.getOutputStream();
         BufferedInputStream read = new BufferedInputStream(new FileInputStream("cliprofilepic.png"));
 
-        
-
-        
-        
-        
-
-       sendMessageThroughSocket("I dont like gay people", serverGui ,12);
-       
+       sendMessageThroughSocket("I dont like gay people", serverGui ,12, 0);       
         
        byte[] bytes = new byte[4096];
        int i;
+    
 
        while((i = read.read(bytes)) != -1) {
             out.write(bytes, 0 , i);
        }
-        
+       
        pictureSocket.close();
+       System.out.println("the Server is ready to chat...");
         
         
         
+
     }
-    public static void sendMessageThroughSocket(String message, GUI gui, int y) throws IOException {
-        gui.sendMessage(message, y);
-        OutputStream out = chattin.getOutputStream();
-        Writer write = new OutputStreamWriter(out, "UTF-8");
-        write.write(message);
-        write.flush();
-        
+    public void isServer (boolean answer) {
+        isServer = answer;
     }
+    public static void sendMessageThroughSocket(String message, GUI gui, int y, int x) throws IOException {
+            
+            
+            // gui.sendMessage(message, y, 1000);
+            // OutputStream out = chat.getOutputStream();
+            // Writer write = new OutputStreamWriter(out, "UTF-8");
+            // write.write(message);
+            // write.flush();
+            // write.close();
+
+            
+       
+    }
+
 }
 
