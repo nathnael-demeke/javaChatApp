@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ClientSideApp {
@@ -19,6 +21,7 @@ public class ClientSideApp {
     public static void main(String[] args) throws IOException, InterruptedException {
         String serverAddress = "localhost";
         Socket reciveMessageFromServer = new Socket(serverAddress, 19);
+        Socket finishedClinSocket = new Socket(serverAddress, 1);
         Socket profilePicturSocket = new Socket(serverAddress,53);
         profilePicturSocket.setSoTimeout(100000);
         Socket profileName = new Socket(serverAddress,12);
@@ -57,18 +60,40 @@ public class ClientSideApp {
     //       
     //    }
     String actualMessage = "";
-    int i;
-    byte[] bytes = new byte[1024];
+    int i = 0;
+    List<Integer> recivedBytes = new ArrayList<>();
     StringBuilder stringBuilder = new StringBuilder();
-    
-        while ((i = readMessageFromServer.read()) != -1) {
+    InputStream lengthOfWord = finishedClinSocket.getInputStream();
+    int recivedLength = lengthOfWord.read();
+    // Reader reader2 = new InputStreamReader(lengthOfWord, "UTF-8");
+    // BufferedReader lBufferedReader = new BufferedReader(reader2);
+    // String read = lBufferedReader.readLine();
+       while (true) {
+        
+         while ((i = readMessageFromServer.read()) != -1) {
+           
             stringBuilder.append((char)i);
+            recivedBytes.add(i);
             System.out.println("hey " + i);
-            System.out.println("this is " + stringBuilder.toString());
+            
+            
+            System.out.println(recivedBytes);
+           
+            
+            if (recivedBytes.size() != 0 ) {
+                 int notifyFinished = recivedBytes.size() - 1;
+                 System.out.println(recivedBytes.get(notifyFinished));
+                 var theLasInteger  = recivedBytes.get(notifyFinished);
+                 System.out.println("this is the length " + recivedLength);
+                 if (theLasInteger ==recivedLength) {
+                    break;
+                 }
+            }
+            
         }
-        System.out.println(stringBuilder.toString());
-        clientGui.getMessage(stringBuilder.toString(),15);
-        System.out.println("finished");
+        
+        
+       }
 
         
         // }

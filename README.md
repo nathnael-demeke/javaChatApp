@@ -14,7 +14,7 @@ System Design
 - 53 --- sending the profile picture 
 - 12  --- sending the profile names
 - 19 ---- sending messages between each-other
-
+- 1 ---- we are trying to send the amount of text that is send so that our program can know if the string was sent completely
 
   Methods implemented for GUI.class
 

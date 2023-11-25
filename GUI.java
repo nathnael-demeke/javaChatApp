@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -33,8 +34,11 @@ public class GUI implements KeyListener{
     int windowWidth = 490;
     int windowHeight = 680;
     public int totalMessages;
+    int lengthOfSentMessage;
     public ServerSocket chattingSocket;
     static Socket chat;
+    OutputStream out;
+    ServerSocket finishedNotifyServerSocket;
     public String profilePictureImagePathString;
     JFrame window;
     JPanel navJPanel;
@@ -55,6 +59,7 @@ public class GUI implements KeyListener{
     
     public GUI() throws IOException { 
         window = new JFrame();
+        
         textingPanel = new JScrollPane();
         textingPanel.setLayout(null);
         textingPanel.setVisible(true);
@@ -264,8 +269,9 @@ public class GUI implements KeyListener{
     public String getTextFieldInput() {
          return messageField.getText();
     }
-    public void connectAsServer(ServerSocket soc) {
+    public void connectAsServer(ServerSocket soc, ServerSocket sendlegnSocket) {
         chattingSocket = soc;
+        finishedNotifyServerSocket = sendlegnSocket;
     }
 
 
@@ -295,17 +301,63 @@ public class GUI implements KeyListener{
                 if (isServer) {
                 
                 chat = chattingSocket.accept();
-                OutputStream out = chat.getOutputStream();
-                BufferedOutputStream outputStream = new BufferedOutputStream(out);
+                out = chat.getOutputStream();
+                
                 
                 // Writer write = new OutputStreamWriter(outputStream, "UTF-8");
                 byte[] bytes = message.getBytes("UTF-8");
-
+                Socket finiSocket = finishedNotifyServerSocket.accept();
+               
                 for (byte bite : bytes) {
                     out.write(bite);
                     System.out.println("hey this is " + bite);
                 }
+                String[] wordStrings = message.split(" ");
+                lengthOfSentMessage = 0;
+                for (String word : wordStrings) {
+                    lengthOfSentMessage++;
+                }
+                System.out.println(lengthOfSentMessage);
+                OutputStream sendLength = finiSocket.getOutputStream();
+               Thread port1Thread = new Thread(new Runnable() {
+                @Override
+                public void run(){        
+                    Writer writeLength;
+                    try {
+                        writeLength = new OutputStreamWriter(sendLength, "UTF-8");
+                        writeLength.write(lengthOfSentMessage);
+                        writeLength.flush();
+                        
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        System.out.println(e.getMessage());
+                    }
+                    
+                }
+               });
+               
+               Thread port19Thread = new Thread(new Runnable() {
+                @Override 
+                public void run() {
+                    
+                    try {
+                        out.write(lengthOfSentMessage);
+                        out.flush();
+                        
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                 
+                }
+               });
+               
+                port1Thread.start();
+                port19Thread.start();
+               
                 System.out.println("line 298: the OutputStream is closed");
+               
+               
                 
             }
             } catch (Exception exception) {
@@ -325,7 +377,6 @@ public class GUI implements KeyListener{
         // TODO Auto-generated method stub
         
     }
-   
 
     }
 

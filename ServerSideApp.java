@@ -1,4 +1,3 @@
-
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,21 +8,18 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Timer;
 
-
-
 public class ServerSideApp {
-  
-    
-    
+
     static boolean isServer;
     static ServerSocket chattingSocket;
+    static ServerSocket lenghSocket;
     static Socket chat;
     public static void main(String[] args) throws IOException {
         String serverProfileString = "Hermela Solomon";
         chattingSocket =  new ServerSocket(19);
-        
+        lenghSocket = new ServerSocket(1);
         GUI serverGui = new GUI();
-        serverGui.connectAsServer(chattingSocket);
+        serverGui.connectAsServer(chattingSocket,lenghSocket);
         ServerSocket sendProfilePic = new ServerSocket(53);
         sendProfilePic.setSoTimeout(1000);
         ServerSocket profileNameSocket = new ServerSocket(12);
@@ -51,6 +47,7 @@ public class ServerSideApp {
         
        byte[] bytes = new byte[4096];
        int i;
+    
 
        while((i = read.read(bytes)) != -1) {
             out.write(bytes, 0 , i);
