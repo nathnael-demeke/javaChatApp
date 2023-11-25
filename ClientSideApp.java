@@ -3,9 +3,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.BufferedReader;
-import java.io.OutputStreamWriter;
-import java.io.OutputStream;
-import java.io.Writer;
+// import java.io.OutputStreamWriter;
+// import java.io.OutputStream;
+// import java.io.Writer;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -19,11 +19,14 @@ public class ClientSideApp {
     static Socket clienSocket;
     static int i;
     public static void main(String[] args) throws IOException, InterruptedException {
+        // String serverAddress = "192.168.152.1";
         String serverAddress = "localhost";
         Socket reciveMessageFromServer = new Socket(serverAddress, 19);
+        System.out.println("port 19: passed");
         Socket finishedClinSocket = new Socket(serverAddress, 1);
+        System.out.println("port 1: passed ...");
         Socket profilePicturSocket = new Socket(serverAddress,53);
-        profilePicturSocket.setSoTimeout(100000);
+        System.out.println("port 53: passed ...");
         Socket profileName = new Socket(serverAddress,12);
         
         InputStreamReader readMessageFromServer = new InputStreamReader(reciveMessageFromServer.getInputStream(), "UTF-8");
@@ -61,38 +64,48 @@ public class ClientSideApp {
     //    }
     String actualMessage = "";
     int i = 0;
-    List<Integer> recivedBytes = new ArrayList<>();
-    StringBuilder stringBuilder = new StringBuilder();
+    
     InputStream lengthOfWord = finishedClinSocket.getInputStream();
     int recivedLength = lengthOfWord.read();
     // Reader reader2 = new InputStreamReader(lengthOfWord, "UTF-8");
     // BufferedReader lBufferedReader = new BufferedReader(reader2);
     // String read = lBufferedReader.readLine();
+    List<Integer> recivedBytes = new ArrayList<>();
+    StringBuilder stringBuilder = new StringBuilder();
+    Integer recivedBytesLastIndex = 0;
+    int y = 0;
        while (true) {
         
          while ((i = readMessageFromServer.read()) != -1) {
            
             stringBuilder.append((char)i);
             recivedBytes.add(i);
-            System.out.println("hey " + i);
-            
-            
-            System.out.println(recivedBytes);
-           
-            
+            // System.out.println("hey " + i);
+            // System.out.println(recivedBytes);         
             if (recivedBytes.size() != 0 ) {
                  int notifyFinished = recivedBytes.size() - 1;
-                 System.out.println(recivedBytes.get(notifyFinished));
+                //  System.out.println(recivedBytes.get(notifyFinished));
                  var theLasInteger  = recivedBytes.get(notifyFinished);
-                 System.out.println("this is the length " + recivedLength);
-                 if (theLasInteger ==recivedLength) {
+                 
+                 if (theLasInteger == recivedLength) {
+                    recivedBytesLastIndex = theLasInteger;
                     break;
                  }
             }
-            
         }
+       
+        int index = stringBuilder.length() - 1;
+        stringBuilder.deleteCharAt(index);
+        System.out.println("line 91: this is the recived bytes last index " + recivedBytesLastIndex);
+
+        System.out.println("this is a string builder line 89: " + stringBuilder);
+        clientGui.getMessage("  " + new String(stringBuilder) + "   ", y);
+        System.out.println("finished");
+        recivedBytes = new ArrayList<>();
+        stringBuilder = new StringBuilder();
+       
         
-        
+        y += 30;
        }
 
         
