@@ -96,10 +96,6 @@ public class ClientSideApp {
        
         int index = stringBuilder.length() - 1;
         stringBuilder.deleteCharAt(index);
-        System.out.println("line 91: this is the recived bytes last index " + recivedBytesLastIndex);
-
-        System.out.println("this is a string builder line 89: " + stringBuilder);
-        System.out.println("client : this is y " + clientGui.y);
         clientGui.getMessage("  " + new String(stringBuilder) + "   ", clientGui.y);
         System.out.println("finished");
         recivedBytes = new ArrayList<>();

@@ -67,7 +67,8 @@ public class GUI implements KeyListener{
     
     public GUI() throws IOException { 
         window = new JFrame();
-        
+        window.setSize(windowWidth,windowHeight);
+        window.setVisible(true);
         /*
 
         textingPanel: is the Scollable panel in which all the message send and recived are found
@@ -88,9 +89,10 @@ public class GUI implements KeyListener{
         sendImageIconHolder.setIcon(sendButtIcon);
 
         textingPanel = new JPanel();
-        
-        
         textingPanel.setLayout(null);
+        
+        
+        
         textingPanel.setVisible(true);
 
         //setting the background image for the window or the JFrame.
@@ -122,7 +124,7 @@ public class GUI implements KeyListener{
         Image backArrow = backArrowIcon.getImage();
         threeDotIcon = new ImageIcon(threeDot);      
         atachmentHolder.setIcon(attachImageIcon);
-        textingPanel.setOpaque(false);
+       
       
         navOptionButton.setBorder(null);
         // messageJPanel.setBackground(Color.black);
@@ -131,7 +133,7 @@ public class GUI implements KeyListener{
         Image backarrImage = backArrow.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
         arrowIconHolder.setIcon(new ImageIcon(backarrImage));      
         profilePicHolder.setSize(50,45);
-        textingPanel.setSize(windowWidth, 200);
+    
         navOptionButton.setFocusable(false);
         // profilePicHolder.setText("Abebe Demelash");
         profilePicHolder.setFont(new Font("Arial", Font.BOLD , 20));
@@ -141,7 +143,7 @@ public class GUI implements KeyListener{
         navOptionButton.setBackground(null);
         navJPanel.setBounds(0, 0, windowWidth, 60);
         textingPanel.setBounds(0,65,windowWidth - 15,500);
-        textingPanel.setBackground(null);
+        
         atachmentHolder.setBounds(4, 2, 60, 60);
         messageField.setBounds(32, 12 , windowWidth - 100 , 40);
         navOptionButton.setBounds(windowWidth - 45, 5, 20 , 50);
@@ -163,18 +165,22 @@ public class GUI implements KeyListener{
         navJPanel.add(navOptionButton);
         navJPanel.add(arrowIconHolder);
         window.add(messageJPanel);
-        textingPanel.setPreferredSize(new Dimension(200,100));
-        JScrollPane scrollPane = new JScrollPane(textingPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS , JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        
+        // JScrollPane scrollPane = new JScrollPane();
         
        
-        scrollPane.setVisible(true);
+        // scrollPane.setVisible(true);
+        // textingPanel.setBackground(null);
+        textingPanel.setOpaque(false);
+        
         window.add(textingPanel);
-        window.setSize(windowWidth,windowHeight);
+        
         messageField.addKeyListener(this);
+        
         //i have made the window have a fixed size no one can change it while runnin
         window.setResizable(false);
         window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
-         window.setVisible(true);
+         
         //null is the layout because i wanted to arrange everything like i wanted   
         window.setLayout(null);
         window.setTitle(windowTitle);    
