@@ -4,25 +4,32 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.io.InputStream;
+import java.nio.file.Paths;
+import java.io.BufferedReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.io.InputStreamReader;
 import java.util.Timer;
-
+import java.nio.file.Files;
 public class ServerSideApp {
 
     static boolean isServer;
     static ServerSocket chattingSocket;
     static ServerSocket lenghSocket;
-    static Socket chat;
+    static ServerSocket chat;
+    static ServerSocket recivingAttachmentFiles;
     public static void main(String[] args) throws IOException {
         String serverProfileString = "Hermela Solomon";
+        
         chattingSocket =  new ServerSocket(19);
         ServerSocket reciveClientMessage = new ServerSocket(16);
         lenghSocket = new ServerSocket(1);
         GUI serverGui = new GUI();
         serverGui.connectAsServer(chattingSocket,lenghSocket);
         ServerSocket sendProfilePic = new ServerSocket(53);
+        recivingAttachmentFiles = new ServerSocket(99);
+        
         sendProfilePic.setSoTimeout(1000);
         ServerSocket profileNameSocket = new ServerSocket(12);
         serverGui.setProfileName(serverProfileString);
@@ -61,6 +68,7 @@ public class ServerSideApp {
            InputStream in = messaging.getInputStream();
            StringBuilder bStringBuilder = new StringBuilder();
            int Input;
+           
            for(Input = in.read(); Input != -1 ; Input = in.read()) {
               
                bStringBuilder.append((char)Input);
@@ -69,11 +77,33 @@ public class ServerSideApp {
            
            serverGui.getMessage(" " + bStringBuilder.toString() + " ", serverGui.y);
            serverGui.y += 30;
-           
+          Thread attachemenThread = new Thread(new Runnable() {
+            @Override 
+            public void run() {
+                try  
+                {
+                    System.out.println("Thread has begined");
+                    Socket recivingAttachmentSocket = recivingAttachmentFiles.accept();
+                    System.out.println("thread finished accepting");
+                    InputStream attachmentStream = recivingAttachmentSocket.getInputStream();
+                    System.out.println("thread is working until line:78 ");
+                    int readingTheAttachemntBytes;
+                    
+                    for (readingTheAttachemntBytes = attachmentStream.read(); readingTheAttachemntBytes != -1 ; readingTheAttachemntBytes = attachmentStream.read()) {
+                        System.out.println(readingTheAttachemntBytes);
+                    }
+                    System.out.println("you have recived a file");
+                   
+                } catch (IOException e) {
+                    System.out.println("ServerSideApp.java " + e.getMessage());
+                }
+            }
+           });
+           attachemenThread.run();
         }
         
     }
-   
+      
     // public static void sendMessageThroughSocket(String message, GUI gui, int y, int x) throws IOException {
             
             
