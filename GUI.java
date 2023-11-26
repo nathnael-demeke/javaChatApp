@@ -1,5 +1,6 @@
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -17,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
@@ -31,8 +33,9 @@ public class GUI implements KeyListener{
     Socket finiSocket;
     static Socket chat;
     OutputStream out;
-
+    Socket sendMessagSocket16;
     //premitive variables
+    public String serverAddress;
     public String windowTitle;
     public String profilePictureImagePathString;
     int windowWidth = 490;
@@ -45,7 +48,7 @@ public class GUI implements KeyListener{
     //Javx swing gui components 
     JFrame window;
     JPanel navJPanel;
-    JScrollPane textingPanel;
+    JPanel textingPanel;
     JLabel atachmentHolder;
     JPanel messageJPanel;
     JTextField messageField;
@@ -54,7 +57,7 @@ public class GUI implements KeyListener{
     JLabel sendImageIconHolder;
     JButton navOptionButton;
     JTextArea messagesArea;
-
+    public int y;
     //Image icons
     ImageIcon sendButtIcon;
     ImageIcon attachImageIcon;
@@ -64,6 +67,8 @@ public class GUI implements KeyListener{
     
     public GUI() throws IOException { 
         window = new JFrame();
+        window.setSize(windowWidth,windowHeight);
+        window.setVisible(true);
         /*
 
         textingPanel: is the Scollable panel in which all the message send and recived are found
@@ -76,14 +81,18 @@ public class GUI implements KeyListener{
          */
        
         isConnected = false;
+        
         sendImageIconHolder = new JLabel();
         sendButtIcon = new ImageIcon("Assets\\send1.png");
         Image sendImage = sendButtIcon.getImage().getScaledInstance(44, 44, Image.SCALE_SMOOTH);
         sendButtIcon = new ImageIcon(sendImage);
         sendImageIconHolder.setIcon(sendButtIcon);
 
-        textingPanel = new JScrollPane();
+        textingPanel = new JPanel();
         textingPanel.setLayout(null);
+        
+        
+        
         textingPanel.setVisible(true);
 
         //setting the background image for the window or the JFrame.
@@ -115,7 +124,7 @@ public class GUI implements KeyListener{
         Image backArrow = backArrowIcon.getImage();
         threeDotIcon = new ImageIcon(threeDot);      
         atachmentHolder.setIcon(attachImageIcon);
-        textingPanel.setOpaque(false);
+       
       
         navOptionButton.setBorder(null);
         // messageJPanel.setBackground(Color.black);
@@ -124,7 +133,7 @@ public class GUI implements KeyListener{
         Image backarrImage = backArrow.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
         arrowIconHolder.setIcon(new ImageIcon(backarrImage));      
         profilePicHolder.setSize(50,45);
-        textingPanel.setSize(windowWidth, 200);
+    
         navOptionButton.setFocusable(false);
         // profilePicHolder.setText("Abebe Demelash");
         profilePicHolder.setFont(new Font("Arial", Font.BOLD , 20));
@@ -134,7 +143,7 @@ public class GUI implements KeyListener{
         navOptionButton.setBackground(null);
         navJPanel.setBounds(0, 0, windowWidth, 60);
         textingPanel.setBounds(0,65,windowWidth - 15,500);
-        textingPanel.setBackground(null);
+        
         atachmentHolder.setBounds(4, 2, 60, 60);
         messageField.setBounds(32, 12 , windowWidth - 100 , 40);
         navOptionButton.setBounds(windowWidth - 45, 5, 20 , 50);
@@ -156,13 +165,22 @@ public class GUI implements KeyListener{
         navJPanel.add(navOptionButton);
         navJPanel.add(arrowIconHolder);
         window.add(messageJPanel);
+        
+        // JScrollPane scrollPane = new JScrollPane();
+        
+       
+        // scrollPane.setVisible(true);
+        // textingPanel.setBackground(null);
+        textingPanel.setOpaque(false);
+        
         window.add(textingPanel);
-        window.setSize(windowWidth,windowHeight);
+        
         messageField.addKeyListener(this);
+        
         //i have made the window have a fixed size no one can change it while runnin
         window.setResizable(false);
         window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
-         window.setVisible(true);
+         
         //null is the layout because i wanted to arrange everything like i wanted   
         window.setLayout(null);
         window.setTitle(windowTitle);    
@@ -213,21 +231,18 @@ public class GUI implements KeyListener{
         textArea1.setText(messageText);
         textArea1.setFont(new Font("Arial", Font.TYPE1_FONT,17));
         first.setBackground(Color.green);
-        
-        System.out.println("GUI.java - line 217: first.height " + first.getHeight());
-        System.out.println("GUI.java - line 218: firs.width " + first.getWidth());
         // first.setBackground(Color.black);
         first.setOpaque(false);
         textArea1.setEditable(false);
         first.add(textArea1);
         textArea1.setBounds(3, 0 , 170 , 50);
-        first.setBounds(windowWidth - 215,y,200,50);
+        first.setBounds(0,y,200,50);
 
         // first.setBounds(windowWidth - 215,100,200,50);
         textingPanel.add(first);
         textingPanel.revalidate();
     } 
-    public void sendMessage(String message, int y, int x) {
+    public void sendMessage(String message, int yAxis) {
          JPanel first = new JPanel();
         JTextArea textArea = new JTextArea();
         textArea.setBackground(Color.green);
@@ -235,12 +250,13 @@ public class GUI implements KeyListener{
         textArea.setText(message);
         textArea.setFont(new Font("Arial", Font.TYPE1_FONT,16));  
         first.setSize(textArea.getWidth(), textArea.getHeight());
-        first.setBackground(Color.black);
+        first.setOpaque(false);
         textArea.setEditable(false);
         first.add(textArea);
-        first.setBounds(x, y , 200,50);
+        first.setBounds(windowWidth - 200, y, 200,50);
 
         textingPanel.add(first);
+        textingPanel.revalidate();
     }
     public String getTextFieldInput() {
          return messageField.getText();
@@ -269,21 +285,50 @@ public class GUI implements KeyListener{
         
         // TODO Auto-generated method stub
        if(e.getKeyCode() == KeyEvent.VK_ENTER) { 
-           
+
             System.out.println("the enter button have been pressed");
             String message = messageField.getText();
             System.out.println("the program is running at line:271");
+            Thread sendingPort16 = new Thread(new Runnable() {
+                OutputStream out;
+                @Override
+                public void run() {
+                  try {
+                     sendMessagSocket16 = new Socket(serverAddress , 16);
+                     out = sendMessagSocket16.getOutputStream();
+                     byte[] bytes = message.getBytes();
+                      int liveWordLength = 0;
+                     for (byte bite : bytes) {
+                        out.write(bite);
+                        liveWordLength += 1;
+                
+                     }
+                     out.flush();
+                     out.close();
+                     System.out.println("writing stream at thread sending port is finished");
+                     
+                     
+                  } catch (Exception e) {
+                    // TODO: handle exception
+                  }
+                }
+            });
             Thread connectMessagingPort = new Thread(new Runnable() {
                 @Override
                 public void run() {
                    if (isConnected == false) {
               try {
+               
                 chat = chattingSocket.accept();
                 isConnected = true;
                 finiSocket = finishedNotifyServerSocket.accept();
               } catch (Exception expect) {
                 // TODO: handle exception
               }
+
+            }
+            else {
+
             }
             messageField.setText("");
                 }
@@ -309,8 +354,10 @@ public class GUI implements KeyListener{
                     out.write(bite);
                     System.out.println("hey this is " + bite);
                 }
+
                 String[] wordStrings = message.split(" ");
-                lengthOfSentMessage = 0;    
+                lengthOfSentMessage = 0;   
+
                 for (String word : wordStrings) {
                     lengthOfSentMessage++;
                 }
@@ -347,16 +394,26 @@ public class GUI implements KeyListener{
                     }
                  
                 }
+
                });
                
                 port1Thread.start();
                 port19Thread.start();
                 lengthOfSentMessage = 0;
                 System.out.println("line 298: the OutputStream is closed");
+                sendMessage(message, y);
+                System.out.println("this is y " + y); 
+                y += 30;
                
                
                 
             }
+            else {
+                sendingPort16.start();
+                sendMessage("  " + message + " ", y);
+                y += 30;
+            }
+
             } catch (Exception exception) {
                 System.out.println("GUI.java error in line 357: " + exception);
             }
@@ -364,8 +421,7 @@ public class GUI implements KeyListener{
 
     }
 
-
-
+     
 
 
     @Override

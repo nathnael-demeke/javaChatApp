@@ -3,6 +3,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,6 +18,7 @@ public class ServerSideApp {
     public static void main(String[] args) throws IOException {
         String serverProfileString = "Hermela Solomon";
         chattingSocket =  new ServerSocket(19);
+        ServerSocket reciveClientMessage = new ServerSocket(16);
         lenghSocket = new ServerSocket(1);
         GUI serverGui = new GUI();
         serverGui.connectAsServer(chattingSocket,lenghSocket);
@@ -42,40 +44,49 @@ public class ServerSideApp {
         Socket pictureSocket = sendProfilePic.accept();
         OutputStream out = pictureSocket.getOutputStream();
         BufferedInputStream read = new BufferedInputStream(new FileInputStream("cliprofilepic.png"));
-
-       sendMessageThroughSocket("I dont like gay people", serverGui ,12, 0);       
-        
+ 
        byte[] bytes = new byte[4096];
        int i;
     
-
+       
        while((i = read.read(bytes)) != -1) {
             out.write(bytes, 0 , i);
        }
        
        pictureSocket.close();
        System.out.println("the Server is ready to chat...");
+       int y = serverGui.y;
+        while (true) {
+           Socket messaging = reciveClientMessage.accept();
+           InputStream in = messaging.getInputStream();
+           StringBuilder bStringBuilder = new StringBuilder();
+           int Input;
+           for(Input = in.read(); Input != -1 ; Input = in.read()) {
+              
+               bStringBuilder.append((char)Input);
+           }
+           System.out.println("the input is finished " + bStringBuilder);
+           
+           serverGui.getMessage(" " + bStringBuilder.toString() + " ", serverGui.y);
+           serverGui.y += 30;
+           
+        }
         
-        
-        
-
     }
-    public void isServer (boolean answer) {
-        isServer = answer;
-    }
-    public static void sendMessageThroughSocket(String message, GUI gui, int y, int x) throws IOException {
+   
+    // public static void sendMessageThroughSocket(String message, GUI gui, int y, int x) throws IOException {
             
             
-            // gui.sendMessage(message, y, 1000);
-            // OutputStream out = chat.getOutputStream();
-            // Writer write = new OutputStreamWriter(out, "UTF-8");
-            // write.write(message);
-            // write.flush();
-            // write.close();
+    //         // gui.sendMessage(message, y, 1000);
+    //         // OutputStream out = chat.getOutputStream();
+    //         // Writer write = new OutputStreamWriter(out, "UTF-8");
+    //         // write.write(message);
+    //         // write.flush();
+    //         // write.close();
 
             
        
-    }
+    // }
 
 }
 

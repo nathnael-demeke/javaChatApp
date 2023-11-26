@@ -73,7 +73,7 @@ public class ClientSideApp {
     List<Integer> recivedBytes = new ArrayList<>();
     StringBuilder stringBuilder = new StringBuilder();
     Integer recivedBytesLastIndex = 0;
-    int y = 0;
+    
        while (true) {
         
          while ((i = readMessageFromServer.read()) != -1) {
@@ -96,16 +96,13 @@ public class ClientSideApp {
        
         int index = stringBuilder.length() - 1;
         stringBuilder.deleteCharAt(index);
-        System.out.println("line 91: this is the recived bytes last index " + recivedBytesLastIndex);
-
-        System.out.println("this is a string builder line 89: " + stringBuilder);
-        clientGui.getMessage("  " + new String(stringBuilder) + "   ", y);
+        clientGui.getMessage("  " + new String(stringBuilder) + "   ", clientGui.y);
         System.out.println("finished");
         recivedBytes = new ArrayList<>();
         stringBuilder = new StringBuilder();
        
         
-        y += 30;
+        clientGui.y += 30;
        }
 
         
