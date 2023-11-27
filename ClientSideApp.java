@@ -12,15 +12,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.net.ServerSocket;
 
 
 public class ClientSideApp {
     static boolean isServer;
     static Socket clienSocket;
+    // static Socket sendingAttachmentFiles;
     static int i;
     public static void main(String[] args) throws IOException, InterruptedException {
         // String serverAddress = "192.168.152.1";
         String serverAddress = "localhost";
+
         Socket reciveMessageFromServer = new Socket(serverAddress, 19);
         System.out.println("port 19: passed");
         Socket finishedClinSocket = new Socket(serverAddress, 1);
@@ -29,11 +32,12 @@ public class ClientSideApp {
         System.out.println("port 53: passed ...");
         Socket profileName = new Socket(serverAddress,12);
         
+        
         InputStreamReader readMessageFromServer = new InputStreamReader(reciveMessageFromServer.getInputStream(), "UTF-8");
         
         InputStream recieveProfile =  profileName.getInputStream();
-        Reader reader = new InputStreamReader(recieveProfile, "UTF-8");
-        BufferedReader readName = new BufferedReader(reader);
+        // Reader reader = new InputStreamReader(recieveProfile, "UTF-8");
+        // BufferedReader readName = new BufferedReader(reader);
 
         
         InputStream in = profilePicturSocket.getInputStream();
@@ -47,7 +51,7 @@ public class ClientSideApp {
         }
 
         GUI clientGui = new GUI();
-    
+         
         clientGui.setProfileName("NATI");
         
         clientGui.setProfilePicture("fuck.png");

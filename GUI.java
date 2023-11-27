@@ -8,8 +8,12 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.awt.Image;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import javax.swing.JFileChooser;
 import java.awt.image.BufferedImage;
 import javax.swing.JScrollPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -18,17 +22,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.awt.event.MouseListener;
 import java.net.UnknownHostException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class GUI implements KeyListener{
+public class GUI implements KeyListener, MouseListener{
     //streams and sockets
     public ServerSocket chattingSocket;
+    static Socket sendingAttachmentFiles;
     ServerSocket finishedNotifyServerSocket;
     Socket finiSocket;
     static Socket chat;
@@ -79,7 +87,7 @@ public class GUI implements KeyListener{
         profilePicHolder: is the profile picture that you will get on the navPanel(Green Navigation Bar)
 
          */
-       
+        isServer = false;
         isConnected = false;
         
         sendImageIconHolder = new JLabel();
@@ -124,6 +132,8 @@ public class GUI implements KeyListener{
         Image backArrow = backArrowIcon.getImage();
         threeDotIcon = new ImageIcon(threeDot);      
         atachmentHolder.setIcon(attachImageIcon);
+        atachmentHolder.addMouseListener(this);
+        
        
       
         navOptionButton.setBorder(null);
@@ -245,10 +255,10 @@ public class GUI implements KeyListener{
     public void sendMessage(String message, int yAxis) {
          JPanel first = new JPanel();
         JTextArea textArea = new JTextArea();
-        textArea.setBackground(Color.green);
+        textArea.setBackground(new Color(37, 211, 102));
         textArea.setSize(first.getWidth(), first.getHeight());
         textArea.setText(message);
-        textArea.setFont(new Font("Arial", Font.TYPE1_FONT,16));  
+        textArea.setFont(new Font("Arial", Font.TYPE1_FONT,17));  
         first.setSize(textArea.getWidth(), textArea.getHeight());
         first.setOpaque(false);
         textArea.setEditable(false);
@@ -322,6 +332,8 @@ public class GUI implements KeyListener{
                 chat = chattingSocket.accept();
                 isConnected = true;
                 finiSocket = finishedNotifyServerSocket.accept();
+               
+               
               } catch (Exception expect) {
                 // TODO: handle exception
               }
@@ -401,7 +413,7 @@ public class GUI implements KeyListener{
                 port19Thread.start();
                 lengthOfSentMessage = 0;
                 System.out.println("line 298: the OutputStream is closed");
-                sendMessage(message, y);
+                sendMessage(" " + message, y);
                 System.out.println("this is y " + y); 
                 y += 30;
                
@@ -428,6 +440,57 @@ public class GUI implements KeyListener{
     public void keyReleased(KeyEvent e) {
         // TODO Auto-generated method stub
         
+    }
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        if (e.getSource() == atachmentHolder) {
+            
+            String currentDir = System.getProperty("user.dir");
+             JFileChooser fileChooser = new JFileChooser(currentDir);
+             fileChooser.showOpenDialog(null);
+           
+            if (!isServer) {
+               try {
+            
+                sendingAttachmentFiles = new Socket(serverAddress, 99);
+                BufferedReader readingAttachmentFile = new BufferedReader(new FileReader(fileChooser.getSelectedFile().getAbsolutePath()));
+                OutputStream attachmenStream = sendingAttachmentFiles.getOutputStream();
+                int attachReaded;
+                for(attachReaded = readingAttachmentFile.read(); attachReaded != -1 ; attachReaded = readingAttachmentFile.read()) {
+                    attachmenStream.write(attachReaded);
+                    System.out.println(attachReaded);
+                }
+                attachmenStream.flush();
+                System.out.println("finished sending files");
+                
+
+            } catch(Exception seningAttachemntException) {
+                System.out.println("there is an error while sending attachmemnt files from client");
+            }
+               
+            }
+             
+        }
+    }
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+       
+    }
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+       
+    }
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
     }
 
     }
