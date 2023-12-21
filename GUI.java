@@ -253,7 +253,7 @@ public class GUI implements KeyListener, MouseListener{
         textingPanel.revalidate();
     } 
     public void sendMessage(String message, int yAxis) {
-         JPanel first = new JPanel();
+        JPanel first = new JPanel();
         JTextArea textArea = new JTextArea();
         textArea.setBackground(new Color(37, 211, 102));
         textArea.setSize(first.getWidth(), first.getHeight());
@@ -319,7 +319,7 @@ public class GUI implements KeyListener, MouseListener{
                      
                      
                   } catch (Exception e) {
-                    // TODO: handle exception
+                    System.out.println("there is an error sending this data");
                   }
                 }
             });

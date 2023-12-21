@@ -31,6 +31,7 @@ public class ClientSideApp {
         Socket profilePicturSocket = new Socket(serverAddress,53);
         System.out.println("port 53: passed ...");
         Socket profileName = new Socket(serverAddress,12);
+        System.out.println("port 12 passed ......");
         
         
         InputStreamReader readMessageFromServer = new InputStreamReader(reciveMessageFromServer.getInputStream(), "UTF-8");
