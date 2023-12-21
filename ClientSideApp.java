@@ -21,8 +21,8 @@ public class ClientSideApp {
     // static Socket sendingAttachmentFiles;
     static int i;
     public static void main(String[] args) throws IOException, InterruptedException {
-        // String serverAddress = "192.168.152.1";
-        String serverAddress = "localhost";
+        String serverAddress = "192.168.152.1";
+        // String serverAddress = "localhost";
 
         Socket reciveMessageFromServer = new Socket(serverAddress, 19);
         System.out.println("port 19: passed");
