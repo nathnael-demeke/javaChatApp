@@ -4,7 +4,7 @@ class client {
     public static void main(String[] args) {
        try {
          System.out.println("Trying to connect......");
-         Socket client = new Socket("192.168.152.1", 12);
+         Socket client = new Socket("localhost", 12);
          
          System.out.println("Connection established succesfully......");
          // while ((i = reader.read()) != -1) {

@@ -5,7 +5,7 @@ class server {
     public static void main(String[] args) {
        try {
          System.out.println(InetAddress.getLocalHost().getHostAddress());
-         ServerSocket server = new ServerSocket(12);
+         ServerSocket server = new ServerSocket(80);
          Socket serverSocket = server.accept();
          Scanner input = new Scanner(System.in);
          OutputStream out = serverSocket.getOutputStream();

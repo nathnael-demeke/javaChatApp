@@ -314,7 +314,7 @@ public class GUI implements KeyListener, MouseListener{
                 
                      }
                      out.flush();
-                     out.close();
+                     
                      System.out.println("writing stream at thread sending port is finished");
                      
                      
