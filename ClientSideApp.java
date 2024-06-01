@@ -21,7 +21,11 @@ public class ClientSideApp {
     // static Socket sendingAttachmentFiles;
     static int i;
     public static void main(String[] args) throws IOException, InterruptedException {
+<<<<<<< HEAD
         String serverAddress = "192.168.1.8";
+=======
+        String serverAddress = "192.168.152.1";
+>>>>>>> ad7ddd52f13950454fb7c706ec764001780a9754
         // String serverAddress = "localhost";
 
         Socket reciveMessageFromServer = new Socket(serverAddress, 19);
@@ -31,6 +35,7 @@ public class ClientSideApp {
         Socket profilePicturSocket = new Socket(serverAddress,53);
         System.out.println("port 53: passed ...");
         Socket profileName = new Socket(serverAddress,12);
+        System.out.println("port 12 passed ......");
         
         
         InputStreamReader readMessageFromServer = new InputStreamReader(reciveMessageFromServer.getInputStream(), "UTF-8");

@@ -64,8 +64,11 @@ public class ServerSideApp {
        System.out.println("the Server is ready to chat...");
        int y = serverGui.y;
         while (true) {
+           System.out.println("waiting");
            Socket messaging = reciveClientMessage.accept();
+           System.out.println("messaging past");
            InputStream in = messaging.getInputStream();
+           System.out.println("in passed");
            StringBuilder bStringBuilder = new StringBuilder();
            int Input;
            
